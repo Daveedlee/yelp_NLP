@@ -76,7 +76,6 @@ def wordcloud_auto(df):
         plt.figure(figsize=(24,16))
         plt.imshow(wordcloud, interpolation='bilinear')
         plt.axis('off')
-        cloud.to_file('w_clouds/nevada.png')
         plt.show();
     else:
         print("Cannot locate the text column. Please use pd.dataframe.rename() to specify the column.")
