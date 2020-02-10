@@ -7,6 +7,8 @@ from gensim.parsing.preprocessing import remove_stopwords
 from textblob import TextBlob as tb
 from spacy.tokenizer import Tokenizer
 from spacy.lang.en import English
+from tqdm import tqdm
+import langdetect
 
 
 def overall_cleaner(df, list_of_columns):
@@ -20,6 +22,16 @@ def overall_cleaner(df, list_of_columns):
         new_df[i] = df.loc[:,i]
     return new_df
 
+
+def lang_filter(df):
+    df['lang'] = None
+    for i in tqdm(range(len(df.text))):
+        try:
+            df['lang'].iloc[i] = langdetect.detect(df.text.iloc[i])
+        except:
+            df['lang'].iloc[i] = 'n/a'
+    df = df[df['lang'] == 'en']
+    return df
 
 def clean_text_round(text):
     '''Make text lowercase, remove text in square brackets, 
