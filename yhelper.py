@@ -12,6 +12,7 @@ from spacy.lang.en import English
 from tqdm import tqdm
 import langdetect
 import pickle
+import seaborn as sns
 
 
 def overall_cleaner(df, list_of_columns):
@@ -104,7 +105,7 @@ class neural_modeling(object):
         from keras.preprocessing import sequence, text
 
         self.path = path
-        self.df = pickle.load(open('by_states/%s' % self.path, 'rb'))
+        self.df = pickle.load(open(self.path, 'rb'))
         self.text = self.df.text
         self.total_vocab = set(word for text in self.df.text for word in text.split(' '))
 
@@ -159,7 +160,7 @@ class neural_modeling(object):
 
             tokenized_s = self.tokenizer.texts_to_sequences(review_sample)
             rating_pred = np.argmax(model.predict(sequence.pad_sequences(tokenized_s, maxlen=150))[0])
-            print('That review looks like', rating_pred, 'star(s)!')
+            print('That review looks like', (rating_pred + 1), 'star(s)!')
 
         if save:
             model.save('models/' + self.path + '.h5')
@@ -258,15 +259,16 @@ class simple_bar():
         self.count = Counter(self.ngrams).most_common(n_most)
 
         for i in self.count:
-            if len(self.count[0]) == 2:
+            if len(self.count[0][0]) == 2:
                 self.index.append('\n'.join([i[0][0], i[0][1]]))
                 self.value.append(i[1])
-            elif len(self.count[0]) == 3:
+            elif len(self.count[0][0]) == 3:
                 self.index.append('\n'.join([i[0][0], i[0][1], i[0][2]]))
                 self.value.append(i[1])
             else:
                 print('Neither 2 nor 3')
 
-    def barplot(self, size=(24,12)):
+    def barplot(self, size=(35,13)):
         plt.figure(figsize=size)
-        plt.bar(self.index, self.value)
+        barplot = sns.barplot(self.index, self.value)
+        barplot.tick_params(labelsize=25)
