@@ -72,7 +72,7 @@ When observing bigrams and trigrams, the interpretability surges-we begin to see
 #### Similarities, Differences, and Weird Outliers
 Similarities among the regions, in my humble opinion, show how we 'humans' think when making a critique. The bigrams and trigrams are often dominated with the answers concerning the five Ws(when, where, why, who, and what). Also, several food names make appearances, sweet potato fries being the decisive number one among them.
 
-Well then, what's the difference? Although subtle, each region has a very specific feature that reviewers seem to appreciate. Nevada, for instance, the phrase "great customer service" is the overwhelming number one. With "las vegas" being its number one bigram, it can be deduced that such trigram derives from its core metropolitan area. Likewise,
+Well then, what's the difference? Although subtle, each region has a very specific feature that reviewers seem to appreciate. In Nevada, for instance, the phrase "great customer service" is the overwhelming number one. With "las vegas" being its number one bigram, it can be deduced that such trigram derives from its core metropolitan area. All other regions, too, compliment customer service experience, but not as much. It's absolutely unique to Nevada.
 
 I didn't want to bombard this readme page with any more histogram, but this trigram from Wisconsin is worth a look. Try to find something odd.
 ![](/images/wi_tri.png)
