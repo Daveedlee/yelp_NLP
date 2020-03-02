@@ -1,8 +1,4 @@
 # yelp_NLP
-# WAIT!
-![](/images/caution.jpeg)
-
-This README is under construction! More will come in a day or two. Sorry for the inconvenience.
 
 ## Overview:
  1. Datasets have been collected
@@ -51,6 +47,7 @@ As I stressed earlier, this dataset is huge and that quickly became problematic.
 
 Adhering to the assumptions above, I was able to narrow down to approximately 0.8 million reviews. Furthermore, I decided to build **8 different models based on region,** instead of building a gigantic lump.
 
+
 ### Word Cloud, Bigram, and Trigram
 A word cloud looks pretty fancy; words run both horizontally and vertically. Not only that, each word has a different size, color and so forth. But what does it mean?
 
@@ -69,19 +66,24 @@ What's noticeable when comparing n-grams to word cloud is that the n-grams show 
 
 When observing bigrams and trigrams, the interpretability surges-we begin to see what, when, what, and how. When did the reviewers go to the restaurant? During its happy hour(bigram). What did they like the most? Sweet potato fries(trigram). And how did they complement it? By using phrases like "great food." Super interesting, aye? It gets even more interesting when comparing this macro trend region by region.
 
-#### Similarities, Differences, and Weird Outliers
+#### Similarities, Differences
 Similarities among the regions, in my humble opinion, show how we 'humans' think when making a critique. The bigrams and trigrams are often dominated with the answers concerning the five Ws(when, where, why, who, and what). Also, several food names make appearances, sweet potato fries being the decisive number one among them.
 
-Well then, what's the difference? Although subtle, each region has a very specific feature that reviewers seem to appreciate. In Nevada, for instance, the phrase "great customer service" is the overwhelming number one. With "las vegas" being its number one bigram, it can be deduced that such trigram derives from its core metropolitan area. All other regions, too, compliment customer service experience, but not as much. It's absolutely unique to Nevada.
+Well then, what's the difference? Although subtle, each region has a very specific feature that reviewers seem to appreciate. In Nevada, for instance, the phrase "great customer service" is the overwhelming number one. With "las vegas" being its number one bigram, it can be deduced that such trigram derives from its core metropolitan area.
 
-I didn't want to bombard this readme page with any more histogram, but this trigram from Wisconsin is worth a look. Try to find something odd.
+#### Weird Outlier
 ![](/images/wi_tri.png)
+I didn't want to bombard this readme page with any more histogram, but this trigram from Wisconsin is worth a look. Try to find something odd.
+
 ***Ha Long Bay?!?!?!?!?!***
 
 I was just baffled when I first saw this, but a quick Google search revealed that Ha Long Bay is the name of the Vietnamese restaurant in Madison. It nonetheless is interesting because this is the first occasion where the name of a restaurant appears in the n-gram charts.
 
-## Non-Neural Network (Random Forest and Bernoulli Naive Bayes)
+# Modeling
+## GloVe vs Tokenizer
 
+## Non-Neural Network (Random Forest and Bernoulli Naive Bayes)
+Adhering to Occam's Razor, I wanted to cascade my work process from the least computationally heavy to the most. Due to my target being a multi-class, I didn't have that many algorithms to go shuffle through. I narrowed my choices down to Naive Bayes (Bernoulli) and Random Forest Classifier. Following is the result:
 
 **Test Accuracy**
 
@@ -96,7 +98,32 @@ I was just baffled when I first saw this, but a quick Google search revealed tha
 | Quebec | 49% | 48% |
 | Wisconsin | 49% | 48% |
 
+![](https://daveedlee.github.io/decker/images/gameover.gif)
+
+They're bottom-line terrible. But why is that? Well, they all share the same story. Let's further look at a detailed classification report from Nevada.
+
+**Random Forest**
+
+![](/images/rf_nevada.png)
+
+**Bernoulli Naive Bayes**
+
+![](/images/bnb_nevada.png)
+
+The Random Forest classifier just skips the ratings of two and three, whereas Naive Bayes performs a little better. When looking at the distribution of the samples, it's evident that the problem is caused by the class imbalance. One way to work around this issue would be using smote. Due to its computationally heavy nature, however, I wasn't able to perform this particular step. Another way would be under-sampling, and that is more feasible (And would be added to this project page later on).
+
+
 ## Neural Network Modeling
+
+Instead of just arranging numbers, I wanted to have something relatable; I asked a fellow data scientist to write a review of this imaginary restaurant "Taco del Toro" and have him rate it. Being a curious mind, he wrote the following.
+
+*My girlfriend and I went to Taco Del Toro in Lincoln Park the other day and we were very upset about how our trip panned out.
+One, Lincoln Park is not our favorite neighborhood. Two, as common
+Logan Square millennial vegetarians, we expected that Taco Del Toro would have vegetarian options, but they DID NOT! This is so
+upsetting in the current year! Taco Del Toro needs to expand its menu for all types of customers and not just rich
+Lincoln Park people who do not care about the ANIMALS. Will not be back! But overall it was a fine dining experience*
+
+As you can tell from its content, he wanted to give the restaurant a 1-star rating. This review was tokenized using Keras tokenizer and the result from each model is as follows:
 
 |States| Test Accuracy | Predicted Score |
 | :--------: | :----------: | :-----------:|
@@ -109,11 +136,18 @@ I was just baffled when I first saw this, but a quick Google search revealed tha
 | Quebec | 60% | 5 |
 | Wisconsin | 59% | 5 |
 
-
+only 2 models got it right :(
 
 ## Findings
+#### The Problem of Two, Three, and Four
+As demonstrated by the classification report from non-neural machine learning algorithms, there is a clear problem in determining the ratings of two, three, and four. Why is that? I would like to think that this isn't necessarily the problem on algorithms' part, but rather from what we put in the algorithm. We're pretty good at saying rather a restaurant is good or bad. But how good are we when describing how good or bad a restaurant is?
 
+We're just awful. It isn't because we're less literary or dull to the sensations. We just don't have uniform criteria when writing restaurant reviews. For some the service may be the number one criteria; for others, it might be the food. Or better yet, it could be 'that' dessert. We just don't know what it means when a one says "oh this restaurant is three stars." Even better, what would happen when we bin the rating into two categories? The result is stunning: the accuracy goes up to **90 percent.**
 
+#### GloVe vs Tokenizer
+The GloVe is without a doubt great resource when vectorizing words; it can sometimes reveal the things that number obsessed data scientists could forgo inadvertently. In this case, however, the GloVe vectorization did not make much difference. The ending result using GloVe on Arizona model only increased its test accuracy by **one percent.**
 
+#### Conclusion
+![](https://daveedlee.github.io/decker/images/dance.gif)
 
-## Challenges and Self-reflection
+The usual 'you get what you put in' applies to this story. The models were trained on data that doesn't know how to distinguish ratings from two to four. As a result, the ending products suffered. Perhaps it may be wise to use the broadest unit possible when classifying using vectorized sentences.
