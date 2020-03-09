@@ -149,7 +149,7 @@ class neural_modeling(object):
     def fit_evaluate(self, n_epoch=5, review_sample=None, save=False):
 
         model = self.baseline()
-        model.fit(self.X_train, self.y_train, epochs=n_epoch, batch_size=100, validation_split=0.1)
+        model.fit(self.X_train, self.y_train, epochs=n_epoch, batch_size=3000, validation_split=0.1)
 
         print('-------Accuracy-------', '\n')
         print(model.evaluate(self.X_test, self.y_test))
@@ -181,7 +181,8 @@ class non_neural(object):
         import pandas as pd
         from sklearn.feature_extraction.text import CountVectorizer
         from sklearn.model_selection import train_test_split
-
+        
+        
         self.df = pickle.load(open(path, 'rb'))
         self.word_list = list(self.df.text)
         self.vectorizer = CountVectorizer()
@@ -191,12 +192,13 @@ class non_neural(object):
         self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(self.matrix_vec,
                                                                                 self.df.review_rating,
                                                                                 test_size=0.33)
+        
     def rf(self):
         from sklearn.ensemble import RandomForestClassifier
         from sklearn.metrics import classification_report, roc_auc_score
 
         rf = RandomForestClassifier(n_estimators=64, class_weight = 'balanced', verbose=True, n_jobs=-1)
-        rf.fit(self.X_train, self.y_train)
+        rf.fit(self.X_smt, self.y_smt)
 
         y_hat_train = rf.predict(self.X_train)
         y_hat_test = rf.predict(self.X_test)
@@ -219,7 +221,7 @@ class non_neural(object):
         from sklearn.metrics import classification_report, roc_auc_score
 
         bnb = BernoulliNB()
-        bnb.fit(self.X_train, self.y_train)
+        bnb.fit(self.X_smt, self.y_smt)
 
         y_hat_train = bnb.predict(self.X_train)
         y_hat_test = bnb.predict(self.X_test)
