@@ -80,7 +80,6 @@ I didn't want to bombard this readme page with any more histogram, but this trig
 I was just baffled when I first saw this, but a quick Google search revealed that Ha Long Bay is the name of the Vietnamese restaurant in Madison. It nonetheless is interesting because this is the first occasion where the name of a restaurant appears in the n-gram charts.
 
 # Modeling
-## GloVe vs Tokenizer
 
 ## Non-Neural Network (Random Forest and Bernoulli Naive Bayes)
 Adhering to Occam's Razor, I wanted to cascade my work process from the least computationally heavy to the most. Due to my target being a multi-class, I didn't have that many algorithms to go shuffle through. I narrowed my choices down to Naive Bayes (Bernoulli) and Random Forest Classifier. Following is the result:
