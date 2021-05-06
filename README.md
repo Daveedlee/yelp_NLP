@@ -8,6 +8,9 @@
  5. Initial findings have been presented
  6. Further modelings with different embeddings are being considered
 
+#### 2021.05.05 
+ 7. Adding sentiment analysis
+
 ## Introduction
 ![](/images/captain.gif)
 
